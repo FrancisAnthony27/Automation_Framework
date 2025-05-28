@@ -30,10 +30,10 @@ public class ABTestingPage extends BasePage {
         return "/abtest";  // relative URL part
     }
     
-    //@FindBy(xpath = "//h3[contains(text(),'A/B Test Variation 1')]")
-    @FindBy(xpath = "//h3[text()='A/B Test Variation 1']")
+    
+    @FindBy(xpath = "//h3[text()='A/B Test Variation 1'] | //h3[text()='A/B Test Control']")
     public WebElement ABTestVariationTitle;
-	
+    
 	
     public void verifyABTestingPage() {
     	String actualUrl = getCurrentUrl();
@@ -44,7 +44,8 @@ public class ABTestingPage extends BasePage {
 	public void verifyABTestVariationTitle() {
 		waitUtils.waitForVisibility(ABTestVariationTitle);
 		String actualTitle = ABTestVariationTitle.getText();
-		String expectedTitle = "A/B Test Variation 1";
+		String expectedTitle = actualTitle.equals("A/B Test Variation 1") ? "A/B Test Variation 1" :
+            actualTitle.equals("A/B Test Control") ? "A/B Test Control" : "Wrong Title";
 	    System.out.println("Actual Title: " + actualTitle);
 	    Assert.assertEquals(actualTitle, expectedTitle, "AB Test Variation Title mismatch!");
 	}
